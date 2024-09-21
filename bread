@@ -1,0 +1,87 @@
+#include <iostream>
+#include <thread>
+using namespace std;
+
+class Mixer{
+public:
+    void kneadDough(int minutes){
+        cout<<"Kneading dough for "<<minutes<<" minutes"<<endl;
+        this_thread::sleep_for(chrono::seconds(minutes)); //Simulating kneading time 
+        cout<<"Dough kneading complete "<<endl;
+    }
+};
+
+class HeatingElement{
+public:
+    void bake(int temperature, int minutes){
+        cout<<"Bake at "<<temperature<<" degrees for "<<minutes<<" minutes"<<endl;
+        this_thread::sleep_for(chrono::seconds(minutes)); //Simulating baking time 
+        cout<<"Baking complete "<<endl;
+    }
+};
+
+class Display{
+public:    
+    void showStatus(const string &status){
+        cout<<"Status: "<<status<<endl;
+    }
+    
+    void showMenu(){
+        cout<<"1. Start Bread Making Process "<<endl;
+        cout<<"2. Exit "<<endl;
+    }
+};
+
+//main bread-making process
+
+class BreadMakingProcess{
+private:
+    Mixer mixer;
+    HeatingElement heater;
+    Display display;
+    
+    void letDoughRise(int minutes){
+        display.showStatus("Letting the dough rise ");
+        this_thread::sleep_for(chrono::seconds(minutes)); //Simulating rising time 
+        display.showStatus("Dough rise complete ");
+    }
+public:
+    void startBreadMaking(){
+        display.showStatus("Bread Making Process started ");
+        
+        //Step1. Kneading dough
+        mixer.kneadDough(3); //Simulating 3 minutes kneading
+        
+        //Step2. Dough rising
+        letDoughRise(2); //Simulating 2 minutes rising
+        
+        //Step3. bake Bread
+        heater.bake(180,4); // Baking at 180 degrees for 4 minutes
+    }
+};
+
+int main() {
+    BreadMakingProcess breadMachine;
+    Display display;
+    
+    int choice;
+    
+    do{
+        display.showMenu();
+        cout<<"Enter a choice "<<endl;
+        cin>>choice;
+        
+        switch(choice){
+            case 1:
+                breadMachine.startBreadMaking();
+                break;
+            case 2:
+                cout<<"Exiting...";
+                break;
+            default:
+                cout<<"Enter the correct choice "<<endl;
+        }
+    }while(choice!=2);
+    
+    return 0;
+}
